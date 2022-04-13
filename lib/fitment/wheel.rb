@@ -10,13 +10,19 @@ module Fitment
       (width_in / 2 - Fitment.in(et_mm)).round(2)
     end
 
-    attr_reader :dia, :width, :et, :offset
+    attr_reader :diameter, :width, :et, :offset
     attr_accessor :bolt_pattern
 
     def initialize(diameter_in, width_in, **kwargs)
-      @dia = diameter_in
+      @diameter = diameter_in
       @width = width_in
-      self.et = kwargs[:et] ? kwargs[:et] : 0
+      if kwargs[:et]
+        self.et = kwargs[:et]
+      elsif kwargs[:offset]
+        self.offset = kwargs[:offset]
+      else
+        self.et = 0
+      end
       @bolt_pattern = kwargs[:bolt_pattern] ? kwargs[:bolt_pattern] : ""
     end
 
@@ -28,10 +34,6 @@ module Fitment
     def offset=(offset_in)
       @offset = offset_in
       @et = self.class.et(@offset, @width)
-    end
-
-    def tire_widths
-      TireSize.tire_widths(@width)
     end
   end
 end
