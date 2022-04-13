@@ -58,7 +58,6 @@ module Fitment
                          [:logarithmic, -229.62, 228.82], # r2 = 0.9951
                          [:logarithmic, -103.60, 183.05]] # r2 = 0.9908
 
-
     # rounds to e.g. 235, 245, 255, etc. (per industry convention)
     def self.snap(flt)
       ((flt - 5) / 10.0).round * 10 + 5
