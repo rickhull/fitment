@@ -54,6 +54,7 @@ module Fitment
     MODELS[:best] = [[:linear, *MODELS[:linear][0]], # r2 = 0.9917; y = a + bx
                      [:power, 33.389, 0.95213],      # r2 = 0.9943; y = ax^b
                      [:power, 59.621, 0.74025]]      # r2 = 0.9939; y = ax^b
+    # uses BELOW_6 and ABOVE_10
     MODELS[:extended] = [[:linear,       30.165, 24.647], # r2 = 0.9954
                          [:logarithmic, -229.62, 228.82], # r2 = 0.9951
                          [:logarithmic, -103.60, 183.05]] # r2 = 0.9908
