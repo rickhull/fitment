@@ -3,6 +3,7 @@ require 'minitest/autorun'
 
 describe Fitment::Combo do
   FC = Fitment::Combo
+  # below should match FC::BY_RIM_WIDTH
   ACTUAL = {
     5.0 => [155, nil, 185],
     8.0 => [225, 245, 275],

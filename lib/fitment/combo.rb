@@ -68,6 +68,7 @@ module Fitment
     # * minimum tire width in mm
     # * maximum tire width limited to 45% aspect ratio
     # * maximum tire width above 45% aspect ratio (big truck tires)
+    # * models: :actual, :simple, :basic, :linear, :best, :extended
     def self.tire_widths(rim_width_in, model = :actual)
       if model == :actual
         (BY_RIM_WIDTH + BELOW_6 + ABOVE_10).each { |row|
@@ -79,7 +80,7 @@ module Fitment
       case model
       when :simple, :basic
         b = MM_PER_INCH
-        params.map { |a| snap(a + MM_PER_INCH * rim_width_in) }
+        params.map { |a| snap(a + b * rim_width_in) }
       when :linear
         params.map { |(a, b)| snap(a + b * rim_width_in) }
       when :best, :extended
