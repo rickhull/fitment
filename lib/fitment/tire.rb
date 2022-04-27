@@ -22,7 +22,7 @@ module Fitment
 
     # the aspect ratio is stored as an integer for easy assignment and
     # comparison, and converted to a float for calculations
-    attr_reader :width, :ratio, :ratio_flt, :wheel_diameter
+    attr_reader :width, :ratio, :wheel_diameter
 
     def initialize(width_mm, ratio, wheel_in)
       @width = width_mm
@@ -33,13 +33,16 @@ module Fitment
       else
         raise("unexpected ratio: #{ratio}")
       end
-      @ratio_flt = self.class.ratio_flt(@ratio)
       @wheel_diameter = wheel_in
+    end
+
+    def ratio_flt
+      self.class.ratio_flt(@ratio)
     end
 
     # sidewall height, (mm) and in
     def sh_mm
-      self.class.sidewall_height(@width, @ratio_flt).round(1)
+      self.class.sidewall_height(@width, ratio_flt).round(1)
     end
     alias_method :sidewall_height, :sh_mm
 
@@ -49,7 +52,7 @@ module Fitment
 
     # overall diameter, mm and (in)
     def od_in
-      self.class.overall_diameter(@width, @ratio_flt, @wheel_diameter).round(2)
+      self.class.overall_diameter(@width, ratio_flt, @wheel_diameter).round(2)
     end
     alias_method :overall_diameter, :od_in
 
