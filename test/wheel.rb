@@ -1,42 +1,58 @@
 require 'fitment/wheel'
 require 'minitest/autorun'
 
-W = Fitment::Wheel
+include Fitment
 
-describe W do
+describe Wheel do
   it "calculates ET given offset" do
-    expect(W.et(3.5, 8)).must_be_kind_of(Numeric)
+    expect(Wheel.et(3.5, 8)).must_be_kind_of(Numeric)
   end
 
   it "calculates offset given ET" do
-    expect(W.offset(45, 8)).must_be_kind_of(Numeric)
+    expect(Wheel.offset(45, 8)).must_be_kind_of(Numeric)
   end
 
   it "initializes with diameter and width" do
     d,w = 18,8
-    wheel = W.new(d, w)
-    expect(wheel).must_be_kind_of W
+    wheel = Wheel.new(d, w)
+    expect(wheel).must_be_kind_of Wheel
     expect(wheel.diameter).must_equal d
     expect(wheel.width).must_equal w
     expect(wheel.et).must_equal 0
     expect(wheel.bolt_pattern).must_equal ""
   end
 
-  it "initializes with optional et and offset" do
-    et = 45
-    wet = W.new(17, 7.5, et: et)
-    expect(wet).must_be_kind_of W
+  it "initializes with optional ET" do
+    d,w,et = 18,8,35
+    wet = Wheel.new(d, w, et)
+    expect(wet).must_be_kind_of Wheel
     expect(wet.et).must_equal et
-
-    offset = 4
-    wof = W.new(16, 10, offset: offset)
-    expect(wof).must_be_kind_of W
-    expect(wof.offset).must_equal offset
   end
 
   it "initializes with optional bolt_pattern" do
-    wbo = W.new(18, 8, bolt_pattern: "5x112")
-    expect(wbo).must_be_kind_of W
-    expect(wbo.bolt_pattern).must_equal "5x112"
+    d,w,bp = 18,8,"5x112"
+    wbp = Wheel.new(d, w, bolt_pattern: bp)
+    expect(wbp).must_be_kind_of Wheel
+    expect(wbp.bolt_pattern).must_equal bp
+  end
+
+  it "allows updates to bolt_pattern" do
+    d,w,bp = 18,8,"5x112"
+    wbp = Wheel.new(d, w)
+    expect(wbp).must_be_kind_of Wheel
+    expect(wbp.bolt_pattern).must_equal ""
+    wbp.bolt_pattern = bp
+    expect(wbp.bolt_pattern).must_equal bp
+  end
+
+  describe OffsetWheel do
+    it "initializes with required offset" do
+      d,w,offset = 20,9,6
+      expect { OffsetWheel.new(d, w) }.must_raise ArgumentError
+      offset = 4
+      wof = OffsetWheel.new(d, w, offset)
+      expect(wof).must_be_kind_of OffsetWheel
+      expect(wof.offset).must_equal offset
+    end
   end
 end

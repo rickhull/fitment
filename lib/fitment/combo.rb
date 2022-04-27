@@ -107,9 +107,9 @@ module Fitment
     def self.new_with_params(tread_with, ratio, diameter, width, offset,
                              et: true)
       tire = Tire.new(tread_with, ratio, diameter)
-      wheel = et ? Wheel.new(diameter, width, et: offset) :
-                Wheel.new(diameter,width, offset: offset)
-
+      wheel = et ?
+                Wheel.new(diameter, width, offset) :
+                OffsetWheel.new(diameter, width, offset)
       Combo.new(wheel: wheel, tire: tire)
     end
 
