@@ -51,30 +51,32 @@ describe T do
   end
 
   describe "2018 Audi S3" do
-    STOCK18 = T.new(225, 40, 18)
-    STOCK19 = T.new(235, 35, 19)
+    before do
+      @stock18 = T.new(225, 40, 18)
+      @stock19 = T.new(235, 35, 19)
 
-    AFTER18 = T.new(245, 40, 18)
-    AFTER19 = T.new(245, 35, 19)
+      @after18 = T.new(245, 40, 18)
+      @after19 = T.new(245, 35, 19)
+    end
 
     it "compares differences" do
-      expect(STOCK18.width).must_be(:<, STOCK19.width)
-      expect(STOCK18.width).must_be(:<, AFTER18.width)
-      expect(STOCK18.overall_diameter).must_be(:<, STOCK19.overall_diameter)
-      expect(STOCK18.overall_diameter).must_be(:<, AFTER18.overall_diameter)
-      expect(STOCK18.sidewall_height).must_be(:>, STOCK19.sidewall_height)
-      expect(STOCK18.sidewall_height).must_be(:<, AFTER18.sidewall_height)
+      expect(@stock18.width).must_be(:<, @stock19.width)
+      expect(@stock18.width).must_be(:<, @after18.width)
+      expect(@stock18.overall_diameter).must_be(:<, @stock19.overall_diameter)
+      expect(@stock18.overall_diameter).must_be(:<, @after18.overall_diameter)
+      expect(@stock18.sidewall_height).must_be(:>, @stock19.sidewall_height)
+      expect(@stock18.sidewall_height).must_be(:<, @after18.sidewall_height)
 
-      expect(STOCK19.width).must_be(:<, AFTER18.width)
-      expect(STOCK19.width).must_be(:<, AFTER19.width)
-      expect(STOCK19.overall_diameter).must_be(:<, AFTER18.overall_diameter)
-      expect(STOCK19.overall_diameter).must_be(:<, AFTER19.overall_diameter)
-      expect(STOCK19.sidewall_height).must_be(:<, AFTER18.sidewall_height)
-      expect(STOCK19.sidewall_height).must_be(:<, AFTER19.sidewall_height)
+      expect(@stock19.width).must_be(:<, @after18.width)
+      expect(@stock19.width).must_be(:<, @after19.width)
+      expect(@stock19.overall_diameter).must_be(:<, @after18.overall_diameter)
+      expect(@stock19.overall_diameter).must_be(:<, @after19.overall_diameter)
+      expect(@stock19.sidewall_height).must_be(:<, @after18.sidewall_height)
+      expect(@stock19.sidewall_height).must_be(:<, @after19.sidewall_height)
 
-      expect(AFTER18.width).must_equal(AFTER19.width)
-      expect(AFTER18.overall_diameter).must_be(:<, AFTER19.overall_diameter)
-      expect(AFTER18.sidewall_height).must_be(:>, AFTER19.sidewall_height)
+      expect(@after18.width).must_equal(@after19.width)
+      expect(@after18.overall_diameter).must_be(:<, @after19.overall_diameter)
+      expect(@after18.sidewall_height).must_be(:>, @after19.sidewall_height)
     end
   end
 end
