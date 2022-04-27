@@ -1,7 +1,10 @@
 require 'fitment'
 
+Fitment.autoload :Tire, 'fitment/tire'
+Fitment.autoload :Wheel, 'fitment/wheel'
+
 module Fitment
-  module Combo
+  class Combo
     # we'll go from 6" to 10" rim width, with emphasis on 7" to 9"
     # a set of 3 tire widths for each rim width: min, max45, max
     # max45 is the maximum width listed at 45% aspect ratio (no higher)
@@ -100,5 +103,85 @@ module Fitment
         raise("unknown model: #{model}")
       end
     end
+
+    def self.new_with_params(tread_with, ratio, diameter, width, offset,
+                             et: true)
+      tire = Tire.new(tread_with, ratio, diameter)
+      wheel = et ? Wheel.new(diameter, width, et: offset) :
+                Wheel.new(diameter,width, offset: offset)
+
+      Combo.new(wheel: wheel, tire: tire)
+    end
+
+    TIRE_EXCESS = 15 # extra rubber material near the bead relevant to fitment
+
+    attr_accessor :tire, :wheel
+
+    def initialize(tire:, wheel:)
+      @tire = tire
+      @wheel = wheel
+    end
+
+    def valid?(model: :actual)
+      min, max45, max = self.class.tire_widths(@wheel.width, model)
+      if min and @tire.width >= min or !min
+        if max45 and @tire.ratio <= 0.46
+          @tire.width <= max45
+        else
+          @tire.width <= max
+        end
+      end
+    end
+
+    def short_width
+      Fitment.mm(@wheel.width) + TIRE_EXCESS * 2
+    end
+
+    def short_height
+      Fitment.mm(@wheel.diameter) + TIRE_EXCESS * 2
+    end
+
+    def short_box
+      [short_width.round(2), short_height.round(2)]
+    end
+
+    def tall_width
+      @tire.width
+    end
+
+    def tall_height
+      @tire.od_mm
+    end
+
+    def tall_box
+      [tall_width.round(2), tall_height.round(2)]
+    end
+
+    # returns [inside increase, outside increase, diameter increase] for each
+    # of :wheel and :tire
+    #
+    def increase(other)
+      short_width_increase = other.short_width - self.short_width
+      short_height_increase = other.short_height - self.short_height
+      tall_width_increase = other.tall_width - self.tall_width
+      tall_height_increase = other.tall_height - self.tall_height
+
+      # smaller et on other wheel moves it outside; more inside clearance
+      et_decrease = self.wheel.et - other.wheel.et
+
+      halfwidth = short_width_increase * 0.5
+      wheel = [halfwidth - et_decrease, # inner expansion
+               halfwidth + et_decrease, # outer expansion
+               short_height_increase]   # height increase
+
+      halfwidth = tall_width_increase * 0.5
+      tire = [halfwidth - et_decrease,  # inside expansion
+              halfwidth + et_decrease,  # outside expansion
+              tall_height_increase]     # height increase
+
+      { wheel: wheel.map { |flt| flt.round(2) },
+        tire: tire.map { |flt| flt.round(2) }, }
+    end
+    alias_method(:clearance, :increase)
   end
 end
