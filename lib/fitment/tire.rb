@@ -36,6 +36,10 @@ module Fitment
       @wheel_diameter = wheel_in
     end
 
+    def to_s
+      [[@width, @ratio].join('/'), @wheel_diameter].join('R')
+    end
+
     def ratio_flt
       self.class.ratio_flt(@ratio)
     end

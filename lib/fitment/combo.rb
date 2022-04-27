@@ -122,6 +122,10 @@ module Fitment
       @wheel = wheel
     end
 
+    def to_s
+      [@tire, @wheel].join(' ')
+    end
+
     def valid?(model: :actual)
       min, max45, max = self.class.tire_widths(@wheel.width, model)
       if min and @tire.width >= min or !min

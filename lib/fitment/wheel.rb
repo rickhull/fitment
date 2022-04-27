@@ -20,6 +20,10 @@ module Fitment
       @bolt_pattern = bolt_pattern
     end
 
+    def to_s
+      "#{@diameter}x#{@width} ET#{et}  #{@bolt_pattern}".strip
+    end
+
     def offset
       self.class.offset(@et, @width)
     end
@@ -33,6 +37,10 @@ module Fitment
       @width = width_in
       @offset = offset_in
       @bolt_pattern = bolt_pattern
+    end
+
+    def to_s
+      "#{@diameter}x#{@width} #{@offset}\" offset  #{@bolt_pattern}".strip
     end
 
     def et
