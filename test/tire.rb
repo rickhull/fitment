@@ -6,7 +6,7 @@ T = Fitment::Tire
 describe T do
   before do
     @w = 245
-    @r = 0.35
+    @r = 35
     @d = 18
     @t = T.new(@w, @r, @d)
     @sh_mm = 85.8
@@ -32,10 +32,10 @@ describe T do
     expect(@t.wheel_diameter).must_equal @d
   end
 
-  it "intializes with ratio between 1 and 100" do
-    t = T.new(225, 35, 18)
+  it "intializes with ratio between 0 and 1" do
+    t = T.new(225, 0.35, 18)
     expect(t).must_be_kind_of(T)
-    expect(t.ratio).must_equal 0.35
+    expect(t.ratio).must_equal 35
   end
 
   it "has a sidewall height in mm and inches" do
