@@ -49,4 +49,32 @@ describe T do
     expect(@t.od_in).must_equal @od_in
     expect(@t.od_mm).must_be(:>, @od_in)
   end
+
+  describe "2018 Audi S3" do
+    STOCK18 = T.new(225, 40, 18)
+    STOCK19 = T.new(235, 35, 19)
+
+    AFTER18 = T.new(245, 40, 18)
+    AFTER19 = T.new(245, 35, 19)
+
+    it "compares differences" do
+      expect(STOCK18.width).must_be(:<, STOCK19.width)
+      expect(STOCK18.width).must_be(:<, AFTER18.width)
+      expect(STOCK18.overall_diameter).must_be(:<, STOCK19.overall_diameter)
+      expect(STOCK18.overall_diameter).must_be(:<, AFTER18.overall_diameter)
+      expect(STOCK18.sidewall_height).must_be(:>, STOCK19.sidewall_height)
+      expect(STOCK18.sidewall_height).must_be(:<, AFTER18.sidewall_height)
+
+      expect(STOCK19.width).must_be(:<, AFTER18.width)
+      expect(STOCK19.width).must_be(:<, AFTER19.width)
+      expect(STOCK19.overall_diameter).must_be(:<, AFTER18.overall_diameter)
+      expect(STOCK19.overall_diameter).must_be(:<, AFTER19.overall_diameter)
+      expect(STOCK19.sidewall_height).must_be(:<, AFTER18.sidewall_height)
+      expect(STOCK19.sidewall_height).must_be(:<, AFTER19.sidewall_height)
+
+      expect(AFTER18.width).must_equal(AFTER19.width)
+      expect(AFTER18.overall_diameter).must_be(:<, AFTER19.overall_diameter)
+      expect(AFTER18.sidewall_height).must_be(:>, AFTER19.sidewall_height)
+    end
+  end
 end
