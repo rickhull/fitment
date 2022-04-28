@@ -33,8 +33,29 @@ end
 
 begin
   require 'flay_task'
+
+  # Monkey patch here because flay doesn't respect dirs anymore
+  # created mostly by adam12 in #ruby on Libera.Chat
+
+  module FlayTaskExt
+    def define
+      desc "Analyze for code duplication in: #{dirs.join(", ")}"
+      task name do
+        require "flay"
+        flay = Flay.run(dirs)
+        flay.report if verbose
+
+        raise "Flay total too high! #{flay.total} > #{threshold}" if
+          flay.total > threshold
+      end
+      self
+    end
+  end
+
+  FlayTask.prepend(FlayTaskExt)
+
   FlayTask.new do |t|
-    t.threshold = 400
+    t.threshold = 100
     t.dirs = ['lib']
     t.verbose = true
   end
