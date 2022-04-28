@@ -8,7 +8,7 @@ end
 task default: :test
 
 desc "Run example scripts"
-task examples: [:test, :loadavg] do
+task :examples do
   Dir['examples/**/*.rb'].each { |filepath|
     puts
     sh "ruby -Ilib #{filepath}"
