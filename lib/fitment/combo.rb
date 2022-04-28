@@ -2,9 +2,17 @@ require 'fitment'
 
 Fitment.autoload :Tire, 'fitment/tire'
 Fitment.autoload :Wheel, 'fitment/wheel'
+Fitment.autoload :OffsetWheel, 'fitment/wheel'
 
 module Fitment
   class Combo
+    class ValidationError < RuntimeError; end
+    class DiameterMismatch < ValidationError; end
+    class WidthMismatch < ValidationError; end
+    class MinError < WidthMismatch; end
+    class Max45Error < WidthMismatch; end
+    class MaxError < WidthMismatch; end
+
     # we'll go from 6" to 10" rim width, with emphasis on 7" to 9"
     # a set of 3 tire widths for each rim width: min, max45, max
     # max45 is the maximum width listed at 45% aspect ratio (no higher)
@@ -113,28 +121,51 @@ module Fitment
       Combo.new(wheel: wheel, tire: tire)
     end
 
+    def self.new_with_offset(t, r, d, w, o)
+      self.new_with_params(t, r, d, w, o, et: false)
+    end
+
     TIRE_EXCESS = 15 # extra rubber material near the bead relevant to fitment
 
-    attr_accessor :tire, :wheel
+    attr_accessor :tire, :wheel, :model
 
-    def initialize(tire:, wheel:)
+    def initialize(tire:, wheel:, model: :actual)
       @tire = tire
       @wheel = wheel
+      @model = model
     end
 
     def to_s
       [@tire, @wheel].join(' ')
     end
 
-    def valid?(model: :actual)
-      min, max45, max = self.class.tire_widths(@wheel.width, model)
-      if min and @tire.width >= min or !min
-        if max45 and @tire.ratio <= 0.46
-          @tire.width <= max45
-        else
-          @tire.width <= max
-        end
+    def validate_diameter!
+      wd, twd = @wheel.diameter, @tire.wheel_diameter
+      raise(DiameterMismatch, "wheel: %i; tire: %i" % [wd, twd]) if wd != twd
+      true
+    end
+
+    def validate_width!
+      msg = "tire width %i %s %s %i for wheel width %i"
+
+      min, max45, max = self.class.tire_widths(@wheel.width, @model)
+      raise(MinError, "no min available for width %i" % @wheel.width) if !min
+      if @tire.width < min
+        raise(MinError, msg % [@tire.width, '<', 'min', min, @wheel.width])
       end
+      if max45 and @tire.ratio <= 45 and @tire.width > max45
+        raise(Max45Error, msg % [@tire.width, '>', 'max45', max45, @wheel.width])
+      end
+      raise(MaxError, "no max available for width %i" % @wheel.width) if !max
+      if @tire.width > max
+        raise(MaxError, msg % [@tire.width, '>', 'max', max, @wheel.width])
+      end
+      true
+    end
+
+    def validate!
+      validate_diameter!
+      validate_width!
     end
 
     def short_width
@@ -159,6 +190,11 @@ module Fitment
 
     def tall_box
       [tall_width.round(2), tall_height.round(2)]
+    end
+
+    def bounding_box
+      [[short_width, tall_width].max,
+       [short_height, tall_height].max,]
     end
 
     # returns [inside increase, outside increase, diameter increase] for each
