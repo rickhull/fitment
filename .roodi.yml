@@ -6,9 +6,9 @@ ClassNameCheck:
   pattern: !ruby/regexp /^[A-Z][a-zA-Z0-9]*$/
 ClassVariableCheck:
 CyclomaticComplexityBlockCheck:
-  complexity: 3
+  complexity: 5
 CyclomaticComplexityMethodCheck:
-  complexity: 4
+  complexity: 8
 EmptyRescueBodyCheck:
 ForLoopCheck:
 MethodLineCountCheck:
