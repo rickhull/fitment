@@ -223,5 +223,23 @@ module Fitment
         tire: tire.map { |flt| flt.round(2) }, }
     end
     alias_method(:clearance, :increase)
+
+    def report(other)
+      increase = self.increase other
+      wheel = increase.fetch :wheel
+      tire = increase.fetch :tire
+
+      rpt = []
+      rpt << "Wheel: %s > %s" % [@wheel, other.wheel]
+      rpt << "  Inside extension:   %.1f mm" % wheel[0]
+      rpt << "  Outside extension:  %.1f mm" % wheel[1]
+      rpt << "  Diameter extension: %.1f mm" % wheel[2]
+      rpt << "Tire: %s > %s" % [@tire, other.tire]
+      rpt << "  Inside extension:   %.1f mm" % tire[0]
+      rpt << "  Outside extension:  %.1f mm" % tire[1]
+      rpt << "  Diameter extension: %.1f mm" % tire[2]
+
+      rpt.join "\n"
+    end
   end
 end
