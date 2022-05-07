@@ -111,16 +111,11 @@ module Fitment
       end
     end
 
-    def self.new_with_params(tread_with, ratio, diameter, width, offset,
-                             et: true)
+    def self.new_with_params(tread_with, ratio, diameter, width,
+                             et: nil, offset: nil)
       tire = Tire.new(tread_with, ratio, diameter)
-      wheel = et ? Wheel.new(diameter, width, et: offset) :
-                Wheel.new(diameter, width, offset: offset)
+      wheel = Wheel.new(diameter, width, et: et, offset: offset)
       Combo.new(wheel: wheel, tire: tire)
-    end
-
-    def self.new_with_offset(t, r, d, w, o)
-      self.new_with_params(t, r, d, w, o, et: false)
     end
 
     TIRE_EXCESS = 15 # extra rubber material near the bead relevant to fitment

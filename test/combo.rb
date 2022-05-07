@@ -66,11 +66,11 @@ describe Combo do
 
   describe "real world combo examples" do
     before do
-      @stock18 = Combo.new_with_params(225, 40, 18, 8, 46)
-      @stock19 = Combo.new_with_params(235, 35, 19, 8, 49)
+      @stock18 = Combo.new_with_params(225, 40, 18, 8, et: 46)
+      @stock19 = Combo.new_with_params(235, 35, 19, 8, et: 49)
 
-      @after18 = Combo.new_with_params(245, 40, 18, 8, 45)
-      @after19 = Combo.new_with_params(245, 35, 19, 8, 49)
+      @after18 = Combo.new_with_params(245, 40, 18, 8, et: 45)
+      @after19 = Combo.new_with_params(245, 35, 19, 8, et: 49)
 
       @audi = [@stock18, @stock19, @after18, @after19]
     end
@@ -132,10 +132,10 @@ describe Combo do
 
   describe "unlikely combos" do
     it "validates a truck tire" do
-      truck = Combo.new_with_offset(275, 55, 16, 8, 4)
+      truck = Combo.new_with_params(275, 55, 16, 8, offset: 4)
       expect(truck.validate!).must_equal true
 
-      too_wide = Combo.new_with_offset(325, 55, 16, 8, 4)
+      too_wide = Combo.new_with_params(325, 55, 16, 8, offset: 4)
       expect { too_wide.validate! }.must_raise Combo::MaxError
     end
 
