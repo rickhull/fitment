@@ -2,7 +2,6 @@ require 'fitment'
 
 Fitment.autoload :Tire, 'fitment/tire'
 Fitment.autoload :Wheel, 'fitment/wheel'
-Fitment.autoload :OffsetWheel, 'fitment/wheel'
 
 module Fitment
   class Combo
@@ -152,7 +151,7 @@ module Fitment
       if @tire.width < min
         raise(MinError, msg % [@tire.width, '<', 'min', min, @wheel.width])
       end
-      if max45 and @tire.ratio <= 45 and @tire.width > max45
+      if max45 and @tire.ratio <= 0.45 and @tire.width > max45
         raise(Max45Error, msg % [@tire.width, '>', 'max45', max45, @wheel.width])
       end
       raise(MaxError, "no max available for width %i" % @wheel.width) if !max

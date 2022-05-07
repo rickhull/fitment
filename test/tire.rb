@@ -28,14 +28,14 @@ describe T do
   it "initializes with width, ratio, and wheel diameter" do
     expect(@t).must_be_kind_of(T)
     expect(@t.width).must_equal @w
-    expect(@t.ratio).must_equal @r
+    expect(@t.ratio).must_equal @r/100.0
     expect(@t.wheel_diameter).must_equal @d
   end
 
   it "intializes with ratio between 0 and 1" do
     t = T.new(225, 0.35, 18)
     expect(t).must_be_kind_of(T)
-    expect(t.ratio).must_equal 35
+    expect(t.ratio).must_equal 35/100.0
   end
 
   it "has a sidewall height in mm and inches" do
