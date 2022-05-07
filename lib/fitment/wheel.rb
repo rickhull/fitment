@@ -7,7 +7,7 @@ module Fitment
     end
 
     def self.offset(et_mm, width_in)
-      (width_in / 2 - Fitment.in(et_mm)).round(2)
+      (width_in / 2 - Fitment.inches(et_mm)).round(2)
     end
 
     attr_reader :diameter, :width, :et

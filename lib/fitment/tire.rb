@@ -17,7 +17,7 @@ module Fitment
 
     # inches
     def self.overall_diameter(width_mm, ratio_flt, wheel_in)
-      2 * Fitment.in(sidewall_height(width_mm, ratio_flt)) + wheel_in
+      2 * Fitment.inches(sidewall_height(width_mm, ratio_flt)) + wheel_in
     end
 
     # the aspect ratio is stored as an integer for easy assignment and
@@ -51,7 +51,7 @@ module Fitment
     alias_method :sidewall_height, :sh_mm
 
     def sh_in
-      Fitment.in(sh_mm).round(2)
+      Fitment.inches(sh_mm).round(2)
     end
 
     # overall diameter, mm and (in)
