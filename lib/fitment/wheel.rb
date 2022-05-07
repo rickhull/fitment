@@ -10,41 +10,58 @@ module Fitment
       (width_in / 2 - Fitment.inches(et_mm)).round(2)
     end
 
-    attr_reader :diameter, :width, :et
+    attr_reader :diameter, :width
     attr_accessor :bolt_pattern
 
-    def initialize(diameter_in, width_in, et = 0, bolt_pattern: "")
+    def initialize(diameter_in, width_in, bolt_pattern: "", et: 0, offset: nil)
       @diameter = Rational(diameter_in)
       @width = Rational(width_in)
-      @et = et.to_i
-      @bolt_pattern = bolt_pattern.to_s.strip
-    end
-
-    def offset
-      self.class.offset(@et, @width)
-    end
-
-    def to_s
-      "%gx%g ET%i %s" % [@diameter, @width, @et, @bolt_pattern]
-    end
-  end
-
-  class OffsetWheel < Wheel
-    attr_reader :offset
-
-    def initialize(diameter_in, width_in, offset_in, bolt_pattern: "")
-      @diameter = Rational(diameter_in)
-      @width = Rational(width_in)
-      @offset = Rational(offset_in)
+      if offset
+        @et = nil
+        @offset = Rational(offset)
+      else
+        @offset = nil
+        @et = et.to_i
+      end
       @bolt_pattern = bolt_pattern.to_s.strip
     end
 
     def et
-      self.class.et(@offset, @width)
+      @et or self.class.et(@offset, @width)
+    end
+
+    def offset
+      @offset or self.class.offset(@et, @width)
+    end
+
+    def et?
+      @et
+    end
+
+    def offset?
+      @offset
     end
 
     def to_s
-      "%gx%g offset %g %s" % [@diameter, @width, @offset, @bolt_pattern]
+      ary = ["%gx%g" % [@diameter, @width]]
+      if @offset
+        ary << "offset:%g" % @offset
+      else
+        ary << "et:%i" % @et
+      end
+      ary.join(' ')
+    end
+  end
+
+  class ETWheel < Wheel
+    def initialize(d, w, et = 0, bolt_pattern: "")
+      super(d, w, et: et, bolt_pattern: bolt_pattern)
+    end
+  end
+
+  class OffsetWheel < Wheel
+    def initialize(d, w, offset_in, bolt_pattern: "")
+      super(d, w, offset: offset_in, bolt_pattern: bolt_pattern)
     end
   end
 end
