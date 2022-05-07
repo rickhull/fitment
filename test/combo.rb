@@ -141,7 +141,7 @@ describe Combo do
 
     it "rejects wheel size mismatch" do
       @tire19 = Tire.new(255, 35, 19)
-      @wheel18 = Wheel.new(18, 8, 45)
+      @wheel18 = Wheel.new(18, 8, et: 45)
       @tire17 = Tire.new(205, 40, 17)
 
 

@@ -24,7 +24,7 @@ describe Wheel do
 
   it "initializes with optional ET" do
     d,w,et = 18,8,35
-    wet = Wheel.new(d, w, et)
+    wet = Wheel.new(d, w, et: et)
     expect(wet).must_be_kind_of Wheel
     expect(wet.et).must_equal et
   end
@@ -45,14 +45,11 @@ describe Wheel do
     expect(wbp.bolt_pattern).must_equal bp
   end
 
-  describe OffsetWheel do
-    it "initializes with required offset" do
-      d,w,offset = 20,9,6
-      expect { OffsetWheel.new(d, w) }.must_raise ArgumentError
-      offset = 4
-      wof = OffsetWheel.new(d, w, offset)
-      expect(wof).must_be_kind_of OffsetWheel
-      expect(wof.offset).must_equal offset
-    end
+  it "initializes with optional offset" do
+    d,w,offset = 20,9,6
+    wof = Wheel.new(d, w, offset: offset)
+    expect(wof).must_be_kind_of Wheel
+    expect(wof.offset).must_equal offset
+    expect(wof.et).must_be_nil
   end
 end

@@ -10,7 +10,7 @@ module Fitment
       (width_in / 2 - Fitment.inches(et_mm)).round(2)
     end
 
-    attr_reader :diameter, :width
+    attr_reader :diameter, :width, :et, :offset
     attr_accessor :bolt_pattern
 
     def initialize(diameter_in, width_in, bolt_pattern: "", et: 0, offset: nil)
@@ -26,20 +26,12 @@ module Fitment
       @bolt_pattern = bolt_pattern.to_s.strip
     end
 
-    def et
+    def et!
       @et or self.class.et(@offset, @width)
     end
 
-    def offset
+    def offset!
       @offset or self.class.offset(@et, @width)
-    end
-
-    def et?
-      @et
-    end
-
-    def offset?
-      @offset
     end
 
     def to_s
@@ -50,18 +42,6 @@ module Fitment
         ary << "et:%i" % @et
       end
       ary.join(' ')
-    end
-  end
-
-  class ETWheel < Wheel
-    def initialize(d, w, et = 0, bolt_pattern: "")
-      super(d, w, et: et, bolt_pattern: bolt_pattern)
-    end
-  end
-
-  class OffsetWheel < Wheel
-    def initialize(d, w, offset_in, bolt_pattern: "")
-      super(d, w, offset: offset_in, bolt_pattern: bolt_pattern)
     end
   end
 end
