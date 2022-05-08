@@ -11,9 +11,8 @@ module Fitment
     end
 
     attr_reader :diameter, :width, :et, :offset
-    attr_accessor :bolt_pattern
 
-    def initialize(diameter_in, width_in, bolt_pattern: "", et: 0, offset: nil)
+    def initialize(diameter_in, width_in, et: 0, offset: nil)
       @diameter = Rational(diameter_in)
       @width = Rational(width_in)
       if offset
@@ -23,7 +22,6 @@ module Fitment
         @offset = nil
         @et = et.to_i
       end
-      @bolt_pattern = bolt_pattern.to_s.strip
     end
 
     def et!
