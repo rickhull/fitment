@@ -1,0 +1,18 @@
+audi_s3:
+  - wheel: 18x8et46
+    tire: 225/40R18
+  - wheel: 19x8et49
+    tire: 235/35R19
+  - wheel: 18x8et45
+    tire: 245/40R18
+  - wheel: 19x8et49
+    tire: 245/35R19
+duallie:
+  - wheel: 22.5x9
+    tire: 255/70R22.5
+4runner:
+  - wheel: 17x8
+    tire: 245/70R17
+escape:
+  - wheel: 16x8
+    tire: 265/70R16
