@@ -1,8 +1,37 @@
 require 'minitest/autorun'
 require 'fitment/parse'
+require 'fitment/tire'
 require 'fitment/wheel'
 
 include Fitment
+
+describe "Parse.tire" do
+  it "recognizes valid inputs" do
+    valid = ['225/35R18', '305 / 50 R 19', '265/70R16']
+    valid.each { |input| expect(Parse.tire(input)).must_be_kind_of Tire }
+  end
+
+  it "validates width" do
+    bad_w = ['220/35R18', '310 / 50 R 19', '256/50 R17']
+    bad_w.each { |input|
+      expect { Parse.tire(input) }.must_raise Parse::WidthError
+    }
+  end
+
+  it "validates aspect ratio" do
+    bad_r = ['225/37R18', '225/37 R18', '225 / 37 R 18']
+    bad_r.each { |input|
+      expect { Parse.tire(input) }.must_raise Parse::RatioError
+    }
+  end
+
+  it "validates diameter" do
+    bad_d = ['225/35 R47', '225/35R17.2']
+    bad_d.each { |input|
+      expect { Parse.tire(input) }.must_raise Parse::DiameterError
+    }
+  end
+end
 
 describe "Parse.wheel" do
   it "recognizes valid inputs" do
