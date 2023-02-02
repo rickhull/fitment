@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/rickhull/fitment"
   s.license = "LGPL-3.0"
 
-  s.required_ruby_version = "~> 2"
+  s.required_ruby_version = "> 2"
 
   s.version = File.read(File.join(__dir__, 'VERSION')).chomp
 
